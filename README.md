@@ -1,6 +1,6 @@
 # Fedora CoreOS Butane Configs
 
-Butane configs for provisioning Fedora CoreOS (FCOS) via Ignition.
+Butane configs for provisioning Fedora CoreOS (FCOS) via Ignition. I'll add here over time.
 
 📺 **YouTube walkthrough:** [Add link here]
 
