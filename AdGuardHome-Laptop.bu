@@ -1,0 +1,69 @@
+variant: fcos
+version: 1.7.0
+
+passwd:
+  users:
+    - name: core
+      ssh_authorized_keys:
+        - ssh-ed25519 XXX
+
+storage:
+  directories:
+    - path: /var/adguardhome/work
+      mode: 0755
+
+    - path: /var/adguardhome/conf
+      mode: 0755
+
+  files:
+    # Disable systemd-resolved's DNS stub listener
+    - path: /etc/systemd/resolved.conf.d/adguard.conf
+      mode: 0644
+      contents:
+        inline: |
+          [Resolve]
+          DNSStubListener=no
+
+    # Ignore laptop lid close events
+    - path: /etc/systemd/logind.conf.d/ignore-lid-switch.conf
+      mode: 0644
+      contents:
+        inline: |
+          [Login]
+          HandleLidSwitch=ignore
+          HandleLidSwitchExternalPower=ignore
+          HandleLidSwitchDocked=ignore
+
+    # Quadlet container definition
+    - path: /etc/containers/systemd/adguardhome.container
+      mode: 0644
+      contents:
+        inline: |
+          [Unit]
+          Description=AdGuard Home Container Service
+          After=network-online.target
+          Wants=network-online.target
+
+          [Container]
+          Image=docker.io/adguard/adguardhome:latest
+          ContainerName=adguardhome
+          Network=host
+          Volume=/var/adguardhome/conf:/opt/adguardhome/conf:Z
+          Volume=/var/adguardhome/work:/opt/adguardhome/work:Z
+
+          [Install]
+          WantedBy=multi-user.target
+
+  links:
+    # Use the upstream resolver instead of the local stub
+    - path: /etc/resolv.conf
+      target: /run/systemd/resolve/resolv.conf
+      overwrite: true
+
+systemd:
+  units:
+    - name: systemd-resolved.service
+      enabled: true
+
+    - name: adguardhome.service
+      enabled: true
