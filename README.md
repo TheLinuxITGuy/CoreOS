@@ -4,7 +4,7 @@ Butane configs for provisioning Fedora CoreOS (FCOS) via Ignition.
 
 ## 🎬 Video
 
-<!-- [![Video](https://img.youtube.com/vi/PJytFBO3seM/maxresdefault.jpg)](https://youtu.be/PJytFBO3seM) -->
+[![Video](https://img.youtube.com/vi/57y_n-X93_4/maxresdefault.jpg)](https://youtu.be/57y_n-X93_4)
 
 ## Available Configs
 
