@@ -1,35 +1,23 @@
 # Fedora CoreOS Butane Configs
 
-Butane configs for provisioning Fedora CoreOS (FCOS) via Ignition. I'll add here over time.
+Butane configs for provisioning Fedora CoreOS (FCOS) via Ignition.
 
-📺 **YouTube walkthrough:** [Add link here]
+## 🎬 Video
 
-## 1. AdGuard Home (Quadlet)
+<!-- [![Video](https://img.youtube.com/vi/PJytFBO3seM/maxresdefault.jpg)](https://youtu.be/PJytFBO3seM) -->
 
-Deploys [AdGuard Home](https://adguard.com/en/adguard-home/overview.html) as a rootless Podman Quadlet container on FCOS.
+## Available Configs
 
-- Creates `core` user with SSH key auth
-- Creates data dirs: `/var/adguardhome/work` and `/var/adguardhome/conf`
-- Disables `systemd-resolved`'s stub listener (frees port 53 for AdGuard)
-- Defines a Quadlet unit (`adguardhome.container`) running `adguard/adguardhome:latest` in host network mode, with the data dirs mounted in
-- Repoints `/etc/resolv.conf` to the real upstream DNS resolver instead of the stub
+Grab the `.bu` file for the container you need:
 
-**File:** `AdGuardHomeQuadlet.bu`
-
-## 2. Base FCOS Config
-
-Minimal starting config for a Fedora CoreOS instance.
-
-- Creates `core` user with SSH key auth
-
-**File:** `Basic.bu`
+* **AdGuardHomeQuadlet.bu**: Deploys AdGuard Home as a rootless Podman Quadlet container, handles data directories, frees port 53 by disabling the systemd-resolved stub listener, and runs on the host network.
+* **Basic.bu**: Minimal starting config that creates the `core` user with SSH key authentication.
+ > [!NOTE]
+> I'll be adding to this list over time.
 
 ## Usage
 
-Convert each Butane config to an Ignition file before provisioning. 
-> [!NOTE]
-> Replace `coreos.bu` with the file you are actually using.
+Convert your chosen Butane config to an Ignition file using Podman. The `.ign` file will be needed by the CoreOS installer.
 
 ```bash
-podman run -i --rm quay.io/coreos/butane:release --strict < coreos.bu > coreos.ign
-```
+podman run -i --rm quay.io/coreos/butane:release --strict < filename.bu > filename.ign
